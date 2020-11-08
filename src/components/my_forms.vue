@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="my-col-8 m-auto position-fixed">
+      <div class="my-col-8 m-auto">
         <form class="shadow-lg p-3 mb-3 bg-white rounded" novalidate @submit.prevent="userRegister">
           <div class="input-group mb-3">
             <b-input-group class="mb-2" prepend="Имя и Фамилия">
@@ -15,7 +15,7 @@
                             aria-label="Last name" type="text"
                             @blur="$v.formReg.surname.$touch()">
               </b-form-input>
-              <div v-if="!$v.formReg.name.required" class="form-control-warning invalid-feedback">{{ reqText }}</div>
+              <div v-if="!$v.formReg.name.required" class="invalid-feedback">{{ reqText }}</div>
               <div v-if="!$v.formReg.name.alpha" class="invalid-feedback">{{ alphaText }}</div>
 
               <div v-if="!$v.formReg.surname.required" class="invalid-feedback">{{ reqText }}</div>
@@ -38,7 +38,7 @@
             <div class="form-group">
               <label class="indent" for="exampleFormControlSelect1">Пол</label>
               <select id="exampleFormControlSelect1" class="form-control">
-                <option>Мужской&#128104;&#8205;&#129458;</option>
+                <option>Мужской👦</option>
                 <option>Женский🧔‍</option>
                 <option>Единорог&#129412;</option>
               </select>
@@ -84,17 +84,10 @@
               Нажми <kbd>Backspace</kbd> чтобы удалить
             </b-form-text>
           </div>
-          <!--          :disabled="disabledBtnFinish"-->
-          <button class="btn btn-primary" type="submit">
-            Зарегистрироваться
-          </button>
+
+          <button :disabled="disabledBtn" class="btn btn-primary" type="submit">Зарегистрироваться</button>
         </form>
 
-      </div>
-      <div class="col-4 ml-auto ">
-        <pre style="color: white">
-            {{ $v.formReg }}
-        </pre>
       </div>
     </div>
   </div>
@@ -115,7 +108,6 @@ export default {
       minLengthText: 'Минимальная длина 6 символов!',
       passwordConfirmText: 'Пароли не совпадают',
       formReg: {
-        email: '',
         name: '',
         surname: '',
         year: '',
@@ -125,8 +117,17 @@ export default {
       }
     }
   },
+  computed: {
+    disabledBtn() {
+      return this.$v.formReg.name.$invalid ||
+          this.$v.formReg.surname.$invalid ||
+          this.$v.formReg.year.$invalid ||
+          this.$v.formReg.old.$invalid ||
+          this.$v.formReg.telephone.$invalid ||
+          this.$v.formReg.textarea.$invalid;
+    }
+  },
   methods: {
-
     userRegister() {
       console.group()
       console.log('Вы успешно зарегистрированны!')
@@ -184,7 +185,7 @@ export default {
 
 <style scoped>
 form {
-  background-color: #aa7efb !important;
+  background-color: #cbcbcb !important;
   color: white;
 }
 
