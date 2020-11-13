@@ -1,28 +1,8 @@
 # Пошаговая форма регистрации на Vue
 Регистрация пользователя на сайте по шагам
 Сделано на Bootstap 4 и Vuelidate
-## Project setup
-```
-npm install
-```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# [**Залито на Heroku**](https://ssereda-vue-validation.herokuapp.com/)
 
 
 ***The project was released for my University course***
