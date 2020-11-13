@@ -3,7 +3,7 @@
 Сделано на Bootstap 4 и Vuelidate  
 <a href="url"><img src="form1.gif" width="30%" ></a>
 <a href="url"><img src="form2.gif"  width="48%" ></a>
-# [**Залито на Heroku**](https://ssereda-vue-validation.herokuapp.com/)
+# [**Deploy on Heroku**](https://ssereda-vue-validation.herokuapp.com/)
 
 
 ***The project was released for my University course***
