@@ -1,7 +1,16 @@
 <template>
   <div id="app">
     <jumbotron id="jumbotron"/>
-    <my_forms id="my_forms"/>
+    <div id="main" class="container">
+      <div class="row">
+        <div class="col-8 ">
+          <my_forms id="my_forms"/>
+        </div>
+        <div class="col-4 ">
+          <my_forms_2 id="my_forms_2"/>
+        </div>
+      </div>
+    </div>
     <my_footer/>
   </div>
 </template>
@@ -13,11 +22,12 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import jumbotron from "@/components/jumbotron";
 import my_footer from "@/components/my_footer";
 import my_forms from "@/components/my_forms";
+import my_forms_2 from "@/components/my_forms_2";
 
 export default {
   name: 'App',
   components: {
-    jumbotron, my_footer, my_forms
+    jumbotron, my_footer, my_forms, my_forms_2
   }
 }
 </script>
@@ -45,12 +55,11 @@ body {
   height: 100%;
 }
 
-#jumbotron {
+
+#main {
   flex: 1 0 auto;
+  padding: inherit;
 }
 
-#my_forms {
-  flex: 1 0 auto;
-}
 
 </style>

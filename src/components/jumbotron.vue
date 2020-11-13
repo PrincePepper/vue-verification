@@ -1,6 +1,6 @@
 <template>
   <div class="jumbotron">
-    <h1 class="display-2">Привет, Друг!</h1>
+    <h1 class="display-1">Привет, Друг!</h1>
     <p class="lead">Работа с <kbd class="first_">vue.js</kbd> и <kbd class="second_">form</kbd></p>
   </div>
 </template>
