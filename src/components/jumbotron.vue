@@ -14,7 +14,7 @@ export default {
 <style scoped>
 .jumbotron {
   background-color: #9100FE;
-  padding-bottom: 0;
+  padding: 0;
   color: white;
 }
 

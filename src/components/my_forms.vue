@@ -1,89 +1,131 @@
 <template>
   <div>
     <form novalidate @submit.prevent="userRegister">
-      <div class="input-group mb-3">
-        <b-input-group class="mb-2" prepend="Имя и Фамилия">
-          <b-form-input v-model="formReg.name"
-                        :class="{'is-invalid': $v.formReg.name.$error}"
-                        aria-label="First name" type="text"
-                        @blur="$v.formReg.name.$touch()">
-          </b-form-input>
-          <b-form-input v-model="formReg.surname"
-                        :class="{'is-invalid': $v.formReg.surname.$error}"
-                        aria-label="Last name" type="text"
-                        @blur="$v.formReg.surname.$touch()">
-          </b-form-input>
+      <div v-show="step === 1">
+
+        <div v-if="regMessage" class="alert alert-success" role="alert">
+          Вы успешно зарегистрировались!
+        </div>
+
+        <div class="form-group">
+          <label for="name">Ваше имя</label>
+
+          <input id="name"
+                 v-model.trim="formReg.name"
+                 :class="status($v.formReg.name)"
+                 class="form-control" type="text" @blur="$v.formReg.name.$touch()">
+
           <div v-if="!$v.formReg.name.required" class="invalid-feedback">{{ reqText }}</div>
           <div v-if="!$v.formReg.name.alpha" class="invalid-feedback">{{ alphaText }}</div>
+        </div>
+
+        <div class="form-group">
+          <label for="surname">Ваша фамилия</label>
+
+          <input id="surname"
+                 v-model.trim="formReg.surname"
+                 :class="status($v.formReg.surname)"
+                 class="form-control" type="text" @blur="$v.formReg.surname.$touch()">
 
           <div v-if="!$v.formReg.surname.required" class="invalid-feedback">{{ reqText }}</div>
           <div v-if="!$v.formReg.surname.alpha" class="invalid-feedback">{{ alphaText }}</div>
-        </b-input-group>
-      </div>
-      <div class="form-inline mb-3">
-        <div class="form-group year">
-          <b-input-group prepend="Возраст">
-            <b-form-input v-model="formReg.old"
-                          :class="{'is-invalid': $v.formReg.old.$error}"
-                          class="year-num"
-                          type="number"
-                          @blur="$v.formReg.old.$touch()">
-            </b-form-input>
-            <div v-if="!$v.formReg.old.required" class="invalid-feedback">{{ numberText }}</div>
-
-          </b-input-group>
         </div>
+
         <div class="form-group">
-          <label class="indent" for="exampleFormControlSelect1">Пол</label>
-          <select id="exampleFormControlSelect1" class="form-control">
-            <option>Мужской👦</option>
-            <option>Женский🧔‍</option>
-            <option>Единорог&#129412;</option>
+          <label for="email">Email</label>
+
+          <input id="email"
+                 v-model.trim="formReg.email"
+                 :class="status($v.formReg.email)"
+                 class="form-control" type="text" @blur="$v.formReg.email.$touch()">
+
+          <div v-if="!$v.formReg.email.required" class="invalid-feedback">{{ reqText }}</div>
+          <div v-if="!$v.formReg.email.email" class="invalid-feedback">Пожалуйста введите Email адрес</div>
+        </div>
+
+        <div class="form-group">
+          <label for="year">Год рождения</label>
+
+          <select id="year"
+                  v-model="formReg.year"
+                  :class="status($v.formReg.year)"
+                  class="custom-select" @blur="$v.formReg.year.$touch()">
+            <option disabled value="">Выберите</option>
+            <option v-for="(year, index) in years"
+                    :key="index"
+                    :value="year">{{ year }}
+            </option>
           </select>
+
+          <div v-if="!$v.formReg.year.required" class="invalid-feedback">{{ reqText }}</div>
         </div>
-        <div class="form-group indent">
-          <b-input-group prepend="Год рождения">
-            <b-form-input
-                id="year"
-                v-model="formReg.year"
-                :class="{'is-invalid': $v.formReg.year.$error}"
-                type="date"
-                @blur="$v.formReg.year.$touch()">
-            </b-form-input>
-            <div v-if="!$v.formReg.year.required" class="invalid-feedback">{{ reqText }}</div>
-          </b-input-group>
-        </div>
-      </div>
-      <div class="form-group">
-        <b-input
-            v-model="formReg.telephone"
-            :class="{'is-invalid': $v.formReg.telephone.$error}"
-            placeholder="Номер телефона"
-            type="number"
-            @blur="$v.formReg.telephone.$touch()"/>
-        <div v-if="!$v.formReg.telephone.required" class="invalid-feedback">{{ reqText }}</div>
-        <br>
-        <b-textarea v-model="formReg.textarea"
-                    :class="{'is-invalid': $v.formReg.textarea.$error}"
-                    placeholder="О себе" type="text"
-                    @blur="$v.formReg.textarea.$touch()"></b-textarea>
-        <div v-if="!$v.formReg.textarea.required" class="invalid-feedback">{{ reqText }}</div>
-      </div>
-      <div class="form-group mb-5">
-        <label>Напишите на каких языках программирования ты пишешь</label>
-        <b-form-tags
-            v-model="value"
-            :input-attrs="{ 'aria-describedby': 'tags-remove-on-delete-help' }"
-            input-id="tags-remove-on-delete"
-            placeholder="пиши сюда языки"
-            remove-on-delete
-            separator=" "/>
-        <b-form-text id="tags-remove-on-delete-help" class="mt-2 text-left">
-          Нажми <kbd>Backspace</kbd> чтобы удалить
-        </b-form-text>
+
+        <button :disabled="disabledBtn" class="btn btn-primary"
+                type="button" @click="step++">Следующий шаг
+        </button>
+
       </div>
 
-      <button :disabled="disabledBtn" class="btn btn-primary" type="submit">Зарегистрироваться</button>
+      <transition name="slide-fade">
+        <div v-show="step === 2">
+
+          <div class="form-group">
+            <label for="career">Профессия</label>
+
+            <input id="career"
+                   v-model.trim="formReg.career"
+                   :class="status($v.formReg.career)"
+                   class="form-control" placeholder="Например, Frontend"
+                   type="text" @blur="$v.formReg.career.$touch()">
+
+            <div v-if="!$v.formReg.career.alpha" class="invalid-feedback">{{ alphaText }}</div>
+          </div>
+
+          <div class="form-group">
+            <label for="career">Описание</label>
+
+            <b-textarea v-model="formReg.textarea"
+                        :class="status($v.formReg.textarea)"
+                        placeholder="О себе"
+                        type="text" @blur="$v.formReg.textarea.$touch()"/>
+
+            <div v-if="!$v.formReg.textarea.required" class="invalid-feedback">{{ reqText }}</div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Пароль</label>
+
+            <input id="password"
+                   v-model.trim="formReg.password"
+                   :class="status($v.formReg.password)"
+                   class="form-control" type="text" @blur="$v.formReg.password.$touch()">
+
+            <div v-if="!$v.formReg.password.required" class="invalid-feedback">{{ reqText }}</div>
+            <div v-if="!$v.formReg.password.minLength"
+                 class="invalid-feedback">{{ minLengthText }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="passwordConfirm">Подтверждение пароля</label>
+
+            <input id="passwordConfirm"
+                   v-model.trim="formReg.passwordConfirm"
+                   :class="status($v.formReg.passwordConfirm)"
+                   class="form-control" type="text" @blur="$v.formReg.passwordConfirm.$touch()">
+
+            <div v-if="!$v.formReg.passwordConfirm.sameAs"
+                 class="invalid-feedback">{{ passwordConfirmText }}
+            </div>
+          </div>
+
+          <button class="btn btn-light mr-2" type="button" @click="step--">Назад</button>
+          <button :disabled="disabledBtnFinish"
+                  class="btn btn-primary" type="submit">Зарегистрироваться
+          </button>
+
+        </div>
+      </transition>
     </form>
 
   </div>
@@ -91,26 +133,29 @@
 </template>
 
 <script>
-import {between, decimal, email, helpers, required} from 'vuelidate/lib/validators'
+import {email, helpers, minLength, required, sameAs} from 'vuelidate/lib/validators'
 
 const alpha = helpers.regex('alpha', /^[a-zA-Zа-яёА-ЯЁ]*$/)
 export default {
   data() {
     return {
-      value: ['Trololo', 'C#', 'Assembler'],
+      step: 1,
       regMessage: false,
+      years: [],
+      yearEnd: 2020,
       reqText: 'Поле обязательно для заполнения',
       alphaText: 'Запрещены цифры, пробелы и другие символы',
-      numberText: 'Только положительное число',
       minLengthText: 'Минимальная длина 6 символов!',
       passwordConfirmText: 'Пароли не совпадают',
       formReg: {
+        email: '',
         name: '',
         surname: '',
         year: '',
-        old: '',
-        telephone: '',
-        textarea: ''
+        career: '',
+        textarea: '',
+        password: '',
+        passwordConfirm: ''
       }
     }
   },
@@ -118,26 +163,45 @@ export default {
     disabledBtn() {
       return this.$v.formReg.name.$invalid ||
           this.$v.formReg.surname.$invalid ||
-          this.$v.formReg.year.$invalid ||
-          this.$v.formReg.old.$invalid ||
-          this.$v.formReg.telephone.$invalid ||
-          this.$v.formReg.textarea.$invalid;
+          this.$v.formReg.email.$invalid ||
+          this.$v.formReg.year.$invalid
+    },
+    disabledBtnFinish() {
+      return this.$v.formReg.career.$invalid ||
+          this.$v.formReg.textarea.$invalid ||
+          this.$v.formReg.password.$invalid ||
+          this.$v.formReg.passwordConfirm.$invalid
     }
   },
   methods: {
+    status(validation) {
+      return {
+        'is-invalid': validation.$error,
+        'error': validation.$error
+      }
+    },
     userRegister() {
-      console.group("Form first")
+      console.group("Form second")
       console.log('Вы успешно зарегистрированны!')
       console.log('Ваше имя: ' + this.formReg.name)
       console.log('Ваша фамилия: ' + this.formReg.surname)
+      console.log('Email: ' + this.formReg.email)
       console.log('Год рождения: ' + this.formReg.year)
-      console.log('Возвраст: ' + this.formReg.old)
-      console.log('Телефон: ' + this.formReg.telephone)
+      console.log('Профессия: ' + this.formReg.career)
+      console.log('Пароль: ' + this.formReg.password)
       console.groupEnd()
       this.reset()
 
     },
     reset() {
+      // сбросить шаг и показать сообщение о регистрации
+      this.step = 1;
+      this.regMessage = true;
+      // убрать сообщение о регистрации
+      setTimeout(() => {
+        this.regMessage = false
+      }, 3000)
+      // сбросить все поля
       for (let input in this.formReg) {
         this.formReg[input] = ''
       }
@@ -162,49 +226,28 @@ export default {
       year: {
         required
       },
-      old: {
-        required,
-        decimal,
-        between: between(18, 35)
-      },
-      telephone: {
-        required,
-        decimal
+      career: {
+        alpha
       },
       textarea: {
         required
+      },
+      password: {
+        required,
+        minLength: minLength(6)
+      },
+      passwordConfirm: {
+        sameAs: sameAs('password')
       }
     }
   },
-
+  created() {
+    for (let i = this.yearEnd; i >= 1980; i--) this.years.push(i)
+  }
 }
 </script>
 
 <style scoped>
-
-.year {
-  width: 25%;
-}
-
-.year-num {
-  text-align: center;
-}
-
-.indent {
-  margin-left: 10px;
-  margin-right: 5px;
-}
-
-.is-invalid {
-  border-color: #ff8300 !important;
-  box-shadow: 0 0 0 0.2rem rgba(255, 131, 0, 0.30) !important;
-  color: #ff8300 !important;
-  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23ff8300' viewBox='0 0 12 12'><circle cx='6' cy='6' r='4.5'/><path stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/><circle cx='6' cy='8.2' r='.6' fill='%23ff8300' stroke='none'/></svg>") !important;
-}
-
-.invalid-feedback {
-  color: #ff8300 !important;
-}
 
 form {
   background-color: white;
